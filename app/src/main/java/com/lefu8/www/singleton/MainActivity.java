@@ -29,6 +29,10 @@ import com.lefu8.www.singleton.strategy.MultiCal;
 import com.lefu8.www.singleton.strategy.SubCal;
 import com.lefu8.www.singleton.templatemethod.CoderComputer;
 import com.lefu8.www.singleton.templatemethod.MilitaryComputer;
+import java.util.HashMap;
+import java.util.Iterator;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvTemplateMethod = (TextView) findViewById(R.id.tv_template_method);
     TextView tvStrategy = (TextView) findViewById(R.id.tv_strategy);
     TextView tvProxy = (TextView) findViewById(R.id.tv_proxy);
+    TextView tvIterator = (TextView) findViewById(R.id.tv_iterator);
 
     tvSingleton.setOnClickListener(this);
     tvBuilder.setOnClickListener(this);
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     tvTemplateMethod.setOnClickListener(this);
     tvStrategy.setOnClickListener(this);
     tvProxy.setOnClickListener(this);
+    tvIterator.setOnClickListener(this);
   }
 
   @Override public void onClick(View v) {
@@ -170,23 +176,64 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // +
         AddCal addCal = new AddCal();
         cal.setStrategy(addCal);
-        cal.calc(122,109);
+        cal.calc(122, 109);
         // -
         SubCal subCal = new SubCal();
         cal.setStrategy(subCal);
-        cal.calc(122,109);
+        cal.calc(122, 109);
         // *
         MultiCal multiCal = new MultiCal();
         cal.setStrategy(multiCal);
-        cal.calc(122,109);
+        cal.calc(122, 109);
         // /
         DivCal divCal = new DivCal();
         cal.setStrategy(divCal);
-        cal.calc(122,109);
-      break;
+        cal.calc(122, 109);
+        break;
       case R.id.tv_proxy:
         ProxyRmail proxyRmail = new ProxyRmail();
         proxyRmail.obtainEmail("dc,come on~");
+        break;
+      case R.id.tv_iterator:
+        // 提供一种方法访问一个容器对象中各个元素，而又不暴露该对象的内部细节
+
+        // Android 示例
+        //AndroidMileage androidMileage = new AndroidMileage();
+        //Iterator<AndroidMileage.Mileage> iterator = androidMileage.iterator();
+        //while (iterator.hasNext()) {
+        //  AndroidMileage.Mileage mileage = iterator.next();
+        //  if (mileage.name.equalsIgnoreCase("16")) {
+        //    //remove掉的是当前的这个,暂时只是置空,并未真的移掉
+        //    iterator.remove();
+        //  }
+        //  Log.e("mileage", mileage.toString());
+        //}
+        // hashMap 示例
+        HashMap<String, String> ageMap = new HashMap<>();
+        ageMap.put("wmz", "19");
+        ageMap.put("zyz", "20");
+        ageMap.put("srr", "21");
+        Iterator<String> iterator = ageMap.keySet().iterator();
+        while (iterator.hasNext()) {
+          String key = iterator.next();
+          String value = ageMap.get(key);
+          Log.i("iterator", "name:" + key + "age:" + value);
+        }
+        // JSONObject遍历
+        String paramString = "{menu:{\"1\":\"sql\", \"2\":\"android\", \"3\":\"mvc\"}}";
+        JSONObject menuJSONObj = null;
+        try {
+          menuJSONObj = new JSONObject(paramString);
+          JSONObject menuObj = menuJSONObj.getJSONObject("menu");
+          Iterator iter = menuObj.keys();
+          while (iter.hasNext()) {
+            String key = (String) iter.next();
+            String value = menuObj.getString(key);
+            Log.i("iterator", "key:" + key + "value:" + value);
+          }
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
         break;
     }
   }
