@@ -7,7 +7,7 @@ package com.lefu8.www.singleton.iterator;
  *         created at 2017/6/20 14:21
  */
 
-interface Iterator {
+public interface Iterator {
   Object next();
 
   boolean hasNext();
