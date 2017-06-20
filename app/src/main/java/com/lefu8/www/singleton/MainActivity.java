@@ -11,6 +11,7 @@ import com.lefu8.www.singleton.builder.ComputerProduct;
 import com.lefu8.www.singleton.builder.Director;
 import com.lefu8.www.singleton.builder.MsiBuilder;
 import com.lefu8.www.singleton.facade.TvController;
+import com.lefu8.www.singleton.iterator.ConcreteAggregate;
 import com.lefu8.www.singleton.observer.BroadcastObservable;
 import com.lefu8.www.singleton.observer.CEO;
 import com.lefu8.www.singleton.observer.TeamLeader;
@@ -29,8 +30,10 @@ import com.lefu8.www.singleton.strategy.MultiCal;
 import com.lefu8.www.singleton.strategy.SubCal;
 import com.lefu8.www.singleton.templatemethod.CoderComputer;
 import com.lefu8.www.singleton.templatemethod.MilitaryComputer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -234,8 +237,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (JSONException e) {
           e.printStackTrace();
         }
+        // 基于list的自定义迭代器
+        List<Object> list = new ArrayList<>();
+        Beautiful beautiful = new Beautiful();
+        beautiful.age = 21;
+        beautiful.height = 165;
+        list.add(beautiful);
+        Beautiful beautiful1 = new Beautiful();
+        beautiful1.age = 22;
+        beautiful1.height = 168;
+        list.add(beautiful1);
+        Beautiful beautiful2 = new Beautiful();
+        beautiful2.age = 23;
+        beautiful2.height = 170;
+        list.add(beautiful2);
+        ConcreteAggregate concreteAggregate = new ConcreteAggregate(list);
+        com.lefu8.www.singleton.iterator.Iterator ite = concreteAggregate.iterator();
+        while (ite.hasNext()){
+          Beautiful beautiful3 = (Beautiful) ite.next();
+          Log.i("iterator","age:" + beautiful3.age + "height:" + beautiful3.height);
+        }
         break;
     }
+  }
+
+  class Beautiful{
+    public int age;
+    public float height;
   }
 
   class InflateService {
