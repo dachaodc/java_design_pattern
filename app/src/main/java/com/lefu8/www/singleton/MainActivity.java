@@ -18,6 +18,11 @@ import com.lefu8.www.singleton.observer.TeamLeader;
 import com.lefu8.www.singleton.observer.VP;
 import com.lefu8.www.singleton.prototype.WordDocument;
 import com.lefu8.www.singleton.proxy.ProxyRmail;
+import com.lefu8.www.singleton.responsibilitychain.low.Boss;
+import com.lefu8.www.singleton.responsibilitychain.low.GroupLeader;
+import com.lefu8.www.singleton.responsibilitychain.low.Manager;
+import com.lefu8.www.singleton.responsibilitychain.low.ProgramApe;
+import com.lefu8.www.singleton.responsibilitychain.optimization.Leader;
 import com.lefu8.www.singleton.sligleton.Singleton;
 import com.lefu8.www.singleton.sligleton.SingletonContainer;
 import com.lefu8.www.singleton.sligleton.SingletonDCL;
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvStrategy = (TextView) findViewById(R.id.tv_strategy);
     TextView tvProxy = (TextView) findViewById(R.id.tv_proxy);
     TextView tvIterator = (TextView) findViewById(R.id.tv_iterator);
+    TextView tvResponsibilityChain = (TextView) findViewById(R.id.tv_responsibility_chain);
 
     tvSingleton.setOnClickListener(this);
     tvBuilder.setOnClickListener(this);
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     tvStrategy.setOnClickListener(this);
     tvProxy.setOnClickListener(this);
     tvIterator.setOnClickListener(this);
+    tvResponsibilityChain.setOnClickListener(this);
   }
 
   @Override public void onClick(View v) {
@@ -253,15 +260,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         list.add(beautiful2);
         ConcreteAggregate concreteAggregate = new ConcreteAggregate(list);
         com.lefu8.www.singleton.iterator.Iterator ite = concreteAggregate.iterator();
-        while (ite.hasNext()){
+        while (ite.hasNext()) {
           Beautiful beautiful3 = (Beautiful) ite.next();
-          Log.i("iterator","age:" + beautiful3.age + "height:" + beautiful3.height);
+          Log.i("iterator", "age:" + beautiful3.age + "height:" + beautiful3.height);
         }
+        break;
+      case R.id.tv_responsibility_chain:
+        //一个请求沿着一条“链”传递，直到该“链”上的某个处理者处理它为止
+        //先来一个程序猿 这里给他一个三万以内的随机值表示需要申请的差旅费
+        ProgramApe ape = new ProgramApe((int) (Math.random() * 30000));
+        Log.i("responsibilitychainlow", "爷要申请：" + ape.getExpenses() + "元");
+        //再来四个老大
+        GroupLeader leader = new GroupLeader();
+        com.lefu8.www.singleton.responsibilitychain.low.Director director =
+            new com.lefu8.www.singleton.responsibilitychain.low.Director();
+        Manager manager = new Manager();
+        Boss boss = new Boss();
+        //处理申请
+        if (ape.getExpenses() <= 1000) {
+          leader.handleRequest(ape);
+        } else if (ape.getExpenses() <= 5000) {
+          director.handleRequest(ape);
+        } else if (ape.getExpenses() <= 10000) {
+          manager.handleRequest(ape);
+        } else {
+          boss.handleRequest(ape);
+        }
+        // 抽象，接口必须要用啊
+    /*
+     * 先来一个程序猿 这里给他一个三万以内的随机值表示需要申请的差旅费
+		 */
+        com.lefu8.www.singleton.responsibilitychain.optimization.ProgramApes ape1 =
+            new com.lefu8.www.singleton.responsibilitychain.optimization.AndroidApe(
+                (int) (Math.random() * 30000));
+    /*
+     * 再来四个老大
+		 */
+        com.lefu8.www.singleton.responsibilitychain.optimization.Leader leader1 =
+            new com.lefu8.www.singleton.responsibilitychain.optimization.GroupLeader(1000);
+        com.lefu8.www.singleton.responsibilitychain.optimization.Leader director1 =
+            new com.lefu8.www.singleton.responsibilitychain.optimization.Director(5000);
+        com.lefu8.www.singleton.responsibilitychain.optimization.Leader manager1 =
+            new com.lefu8.www.singleton.responsibilitychain.optimization.Manager(10000);
+        com.lefu8.www.singleton.responsibilitychain.optimization.Leader boss1 =
+            new com.lefu8.www.singleton.responsibilitychain.optimization.Boss(40000);
+    /*
+		 * 设置老大的上一个老大
+		 */
+        leader1.setLeader(director1);
+        director1.setLeader(manager1);
+        manager1.setLeader(boss1);
+        // 处理申请
+        leader1.handleRequest(ape1);
         break;
     }
   }
 
-  class Beautiful{
+  class Beautiful {
     public int age;
     public float height;
   }
