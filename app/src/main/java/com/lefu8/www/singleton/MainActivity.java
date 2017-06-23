@@ -10,6 +10,7 @@ import com.lefu8.www.singleton.builder.AppleBuilder;
 import com.lefu8.www.singleton.builder.ComputerProduct;
 import com.lefu8.www.singleton.builder.Director;
 import com.lefu8.www.singleton.builder.MsiBuilder;
+import com.lefu8.www.singleton.command.ClientRole;
 import com.lefu8.www.singleton.facade.TvController;
 import com.lefu8.www.singleton.iterator.ConcreteAggregate;
 import com.lefu8.www.singleton.observer.BroadcastObservable;
@@ -22,7 +23,6 @@ import com.lefu8.www.singleton.responsibilitychain.low.Boss;
 import com.lefu8.www.singleton.responsibilitychain.low.GroupLeader;
 import com.lefu8.www.singleton.responsibilitychain.low.Manager;
 import com.lefu8.www.singleton.responsibilitychain.low.ProgramApe;
-import com.lefu8.www.singleton.responsibilitychain.optimization.Leader;
 import com.lefu8.www.singleton.sligleton.Singleton;
 import com.lefu8.www.singleton.sligleton.SingletonContainer;
 import com.lefu8.www.singleton.sligleton.SingletonDCL;
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvProxy = (TextView) findViewById(R.id.tv_proxy);
     TextView tvIterator = (TextView) findViewById(R.id.tv_iterator);
     TextView tvResponsibilityChain = (TextView) findViewById(R.id.tv_responsibility_chain);
+    TextView tvCommand = (TextView) findViewById(R.id.tv_command);
 
     tvSingleton.setOnClickListener(this);
     tvBuilder.setOnClickListener(this);
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     tvProxy.setOnClickListener(this);
     tvIterator.setOnClickListener(this);
     tvResponsibilityChain.setOnClickListener(this);
+    tvCommand.setOnClickListener(this);
   }
 
   @Override public void onClick(View v) {
@@ -312,6 +314,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         manager1.setLeader(boss1);
         // 处理申请
         leader1.handleRequest(ape1);
+        break;
+      case R.id.tv_command:
+        ClientRole client = new ClientRole();
+        client.assembleAction();
         break;
     }
   }
