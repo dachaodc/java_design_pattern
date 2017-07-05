@@ -1,4 +1,4 @@
-package com.lefu8.www.singleton.command;
+package com.lefu8.www.singleton.command.demo1;
 
 /**
  * 命令调用[调用者角色]

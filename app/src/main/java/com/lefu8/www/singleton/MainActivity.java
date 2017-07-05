@@ -6,12 +6,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.lefu8.www.singleton.Bridge.Circle;
+import com.lefu8.www.singleton.Bridge.Rantangle;
+import com.lefu8.www.singleton.Bridge.V1Drawing;
 import com.lefu8.www.singleton.builder.AppleBuilder;
 import com.lefu8.www.singleton.builder.ComputerProduct;
 import com.lefu8.www.singleton.builder.Director;
 import com.lefu8.www.singleton.builder.MsiBuilder;
-import com.lefu8.www.singleton.command.ClientRole;
+import com.lefu8.www.singleton.command.demo1.ClientRole;
+import com.lefu8.www.singleton.command.demo2.Command;
+import com.lefu8.www.singleton.command.demo2.Producer;
 import com.lefu8.www.singleton.facade.TvController;
+import com.lefu8.www.singleton.factory.abstractF.AbstractFactory;
+import com.lefu8.www.singleton.factory.abstractF.FactoryOne;
+import com.lefu8.www.singleton.factory.abstractF.Flyable;
+import com.lefu8.www.singleton.factory.abstractF.Writeable;
+import com.lefu8.www.singleton.factory.method.BroomFactory;
+import com.lefu8.www.singleton.factory.method.CarFactory;
+import com.lefu8.www.singleton.factory.method.Moveable;
+import com.lefu8.www.singleton.factory.method.VehicleFactory;
+import com.lefu8.www.singleton.factory.simple.BigHouse;
+import com.lefu8.www.singleton.factory.simple.Car;
+import com.lefu8.www.singleton.factory.simple.SimpleFactory;
 import com.lefu8.www.singleton.iterator.ConcreteAggregate;
 import com.lefu8.www.singleton.observer.BroadcastObservable;
 import com.lefu8.www.singleton.observer.CEO;
@@ -63,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvIterator = (TextView) findViewById(R.id.tv_iterator);
     TextView tvResponsibilityChain = (TextView) findViewById(R.id.tv_responsibility_chain);
     TextView tvCommand = (TextView) findViewById(R.id.tv_command);
+    TextView tvBridge = (TextView) findViewById(R.id.tv_bridge);
+    TextView tvFactory = (TextView) findViewById(R.id.tv_factory);
 
     tvSingleton.setOnClickListener(this);
     tvBuilder.setOnClickListener(this);
@@ -75,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     tvIterator.setOnClickListener(this);
     tvResponsibilityChain.setOnClickListener(this);
     tvCommand.setOnClickListener(this);
+    tvBridge.setOnClickListener(this);
+    tvFactory.setOnClickListener(this);
   }
 
   @Override public void onClick(View v) {
@@ -316,9 +336,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         leader1.handleRequest(ape1);
         break;
       case R.id.tv_command:
+        //
+        // 命令模式牵涉到5个角色:
+        // Command:接口，通用抽象方法
+        // Receiver:真正的执行者
+        // ConcreteCommand:具体的命令（持有接收着引用）
+        // Invoker:命令通用执行着（持有命令的引用）
+        // Client:客户角色
+        // demo1-->
         ClientRole client = new ClientRole();
         client.assembleAction();
+        // demo2-->
+        List queue = Producer.produceRequests();
+        for (Iterator it = queue.iterator(); it.hasNext(); )
+        // 取出List中东东,其他特征都不能确定,只能保证一个特征是100%正确,
+        // 他们至少是接口Command的"儿子".所以强制转换类型为接口Command
+        ((Command)it.next()).execute();
         break;
+      case R.id.tv_bridge:
+        //编写一个程序，使用两个绘图的程序的其中一个来绘制矩形或者原型，
+        // 同时，在实例化矩形的时候，它要知道使用绘图程序1（DP1）还是绘图程序2（DP2）
+        // 抽象化角色shape，具体抽象化角色circle，实例化角色drawing，具体实例化角色V1Drawing
+        V1Drawing v1Drawing = new V1Drawing();
+        Circle circle = new Circle(v1Drawing);
+        circle.draw();
+        //矩形
+        V1Drawing v1Drawing2 = new V1Drawing();
+        Rantangle tangle = new Rantangle(v1Drawing2);
+        tangle.draw();
+        break;
+      case R.id.tv_factory:
+        // simple factory
+        SimpleFactory simpleFactory = new SimpleFactory();
+        BigHouse bigHouse = (BigHouse) simpleFactory.create(BigHouse.class);
+        Car car = (Car) simpleFactory.create(Car.class);
+        bigHouse.squre();
+        car.want();
+        // factory method
+        VehicleFactory factory = new BroomFactory();
+        Moveable moveable = factory.create();
+        moveable.run();
+        VehicleFactory carFactory = new CarFactory();
+        Moveable BMW = carFactory.create();
+        BMW.run();
+        // 具体工厂A和B需要生产一些同类型的不同产品
+        // 那么我们就可以试试抽象工厂模式
+        AbstractFactory factory1 = new FactoryOne();
+        Flyable flyable = factory1.createFlyable();
+        flyable.fly(1589);
+        com.lefu8.www.singleton.factory.abstractF.Moveable move = factory1.createMoveable();
+        move.run();
+        Writeable writeable = factory1.createWriteable();
+        writeable.write();
+        break;
+
     }
   }
 

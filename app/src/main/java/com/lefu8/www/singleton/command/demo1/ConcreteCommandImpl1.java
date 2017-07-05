@@ -1,4 +1,4 @@
-package com.lefu8.www.singleton.command;
+package com.lefu8.www.singleton.command.demo1;
 
 /**
  * 更新年龄的命令类  [ 具体命令角色 ]

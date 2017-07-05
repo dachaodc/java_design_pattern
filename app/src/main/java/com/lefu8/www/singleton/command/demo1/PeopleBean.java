@@ -1,4 +1,4 @@
-package com.lefu8.www.singleton.command;
+package com.lefu8.www.singleton.command.demo1;
 
 /**
  * 辅助类，作为接收者Receiver的成员，包含两个属性，用来观察命令的执行情况

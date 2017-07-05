@@ -1,4 +1,4 @@
-package com.lefu8.www.singleton.command;
+package com.lefu8.www.singleton.command.demo1;
 
 /**
  * 命令对象和接受者对象的组装类[客户角色].
